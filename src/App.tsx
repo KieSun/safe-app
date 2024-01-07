@@ -1,9 +1,14 @@
-import React, { useCallback } from 'react'
-import { Container, Button, Grid, Link, Typography } from '@mui/material'
+import React, { useCallback, useEffect, useState } from 'react'
+import { Container, Button, Grid, Typography } from '@mui/material'
 import { useSafeAppsSDK } from '@safe-global/safe-apps-react-sdk'
+import { ConnectWallet } from '@thirdweb-dev/react'
+import { useAddress } from '@thirdweb-dev/react'
+import { fetchData } from './services/project'
 
 const SafeApp = (): React.ReactElement => {
   const { sdk, safe } = useSafeAppsSDK()
+  const address = useAddress()
+  const [data, setData] = useState<any>(null)
 
   const submitTx = useCallback(async () => {
     try {
@@ -24,6 +29,12 @@ const SafeApp = (): React.ReactElement => {
     }
   }, [safe, sdk])
 
+  useEffect(() => {
+    if (address) {
+      fetchData(address).then((res) => setData(res))
+    }
+  }, [address])
+
   return (
     <Container>
       <Grid container direction="column" rowSpacing={2} alignItems="center">
@@ -35,11 +46,11 @@ const SafeApp = (): React.ReactElement => {
             Click to send a test transaction
           </Button>
         </Grid>
-
         <Grid item>
-          <Link href="https://github.com/safe-global/safe-apps-sdk" target="_blank" rel="noreferrer">
-            Documentation
-          </Link>
+          <ConnectWallet />
+        </Grid>
+        <Grid item>
+          <ul>{data && data.map((item: any) => <li key={item.id}>{item.name}</li>)}</ul>
         </Grid>
       </Grid>
     </Container>
