@@ -5,6 +5,7 @@ import CircularProgress from '@mui/material/CircularProgress'
 import Typography from '@mui/material/Typography'
 import { SafeThemeProvider } from '@safe-global/safe-react-components'
 import SafeProvider from '@safe-global/safe-apps-react-sdk'
+import { ThirdwebProvider } from '@thirdweb-dev/react'
 
 import App from './App'
 
@@ -25,7 +26,9 @@ root.render(
               </>
             }
           >
-            <App />
+            <ThirdwebProvider activeChain="goerli" clientId="1e201ec1044b9a5bfc557a0cfc444ad6">
+              <App />
+            </ThirdwebProvider>
           </SafeProvider>
         </ThemeProvider>
       )}
